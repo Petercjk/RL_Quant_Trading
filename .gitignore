@@ -1,21 +1,46 @@
-configs/
-configs/env/
-configs/agent/
-configs/experiment/
+# ========================
+# Python cache
+# ========================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
 
-data/
+# ========================
+# Virtual environment
+# ========================
+.venv/
+venv/
+env/
+
+# ========================
+# Data (DO NOT COMMIT)
+# ========================
 data/raw/
 data/processed/
+*.csv
+*.parquet
+*.h5
 
-src/
-src/agents/
-src/envs/
-src/models/
-src/utils/
-src/data_processing/
-
-train/
-online/
-hyperparam_search/
+# ========================
+# Experiment outputs
+# ========================
 experiments/
-docs/
+logs/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+
+# ========================
+# IDE / OS
+# ========================
+.vscode/
+.idea/
+.DS_Store
+
+# ========================
+# Others
+# ========================
+.ipynb_checkpoints/
+
