@@ -1,0 +1,20 @@
+# Core
+numpy>=1.23
+pandas>=1.5
+
+# Deep Learning
+torch>=2.0
+
+# Reinforcement Learning
+stable-baselines3>=2.0
+gymnasium>=0.28
+
+# Data
+tushare>=1.2.89
+
+# Visualization / Logging
+matplotlib>=3.7
+tqdm>=4.65
+
+# Utilities
+pyyaml>=6.0
