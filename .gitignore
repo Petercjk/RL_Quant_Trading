@@ -11,26 +11,31 @@ __pycache__/
 # ========================
 .venv/
 venv/
-env/
+/env/
 
 # ========================
-# Data (DO NOT COMMIT)
+# Data files
 # ========================
-data/raw/
-data/processed/
+# 忽略数据文件，但保留文件夹结构
+data/raw/*
+data/processed/*
+# 排除掉特定的 CSV 匹配，防止误删重要的配置文件
 *.csv
 *.parquet
 *.h5
 
+
 # ========================
 # Experiment outputs
 # ========================
-experiments/
-logs/
-checkpoints/
+# 根目录下的这些文件夹通常是临时产生的，可以忽略
+/experiments/
+/logs/
+/checkpoints/
 *.pt
 *.pth
 *.ckpt
+
 
 # ========================
 # IDE / OS
@@ -44,3 +49,4 @@ checkpoints/
 # ========================
 .ipynb_checkpoints/
 
+# ========================
