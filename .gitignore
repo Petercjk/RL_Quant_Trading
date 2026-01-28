@@ -35,7 +35,8 @@ data/processed/*
 *.pt
 *.pth
 *.ckpt
-
+# 忽略 docs/ 下的实验数据
+/docs/experiments/
 
 # ========================
 # IDE / OS

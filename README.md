@@ -37,31 +37,40 @@ Here is how the project is organized. This structure is designed to separate con
 ```text
 RL_Quant_Trading/
 │
-├── configs/                   # Configuration files (YAML)
-│   ├── env/                   # Environment settings (transaction cost, window size)
-│   ├── agent/                 # Agent hyperparameters (PPO, A2C, etc.)
-│   └── experiment/            # Experiment protocols
+├── configs/                   # 配置文件 (YAML)
+│   ├── agent/                 # 智能体参数配置 (PPO, A2C 等)
+│   │   └── __pycache__/      
+│   ├── env/                   # 环境配置 (交易成本、窗口大小等)
+│   │   └── __pycache__/      
+│   ├── experiment/            # 实验配置(每次训练为单独一次实验)
+│   │   └── __pycache__/      
+│   └── __pycache__/           #
 │
-├── data/                      # Data storage (Ignored by Git)
-│   ├── raw/                   # downloaded from Tushare
-│   └── processed/             # Cleaned and feature-engineered data
+├── data/                      # 数据存储 (已在 .gitignore 中忽略)
+│   ├── raw/                   # 原始数据 (Tushare 下载)
+│   └── processed/             # 清洗和特征工程后的数据
 │
-├── src/                       # Core Source Code
-│   ├── agents/                # RL Agent implementations
-│   ├── envs/                  # Custom Trading Environments (Gym-compatible)
-│   ├── models/                # Neural Network architectures (PyTorch)
-│   ├── utils/                 # Utilities (Logger, Seed, etc.)
-│   └── data_processing/       # Data cleaning and feature engineering scripts
+├── docs/                      # 文档与笔记
+│   └── experiments/           # 实验结果数据 (已在 .gitignore 中忽略)
+│       └── 20260129_0014_base_experiment
+│           ├── checkpoints   # 模型检查点
+│           ├── logs          # 日志
+│           │   └── PPO_1     # PPO 单独训练日志
+│           ├── plots         # 绘图
+│           └── tables        # 表格数据
 │
-├── train/                     # Training Scripts
-│   └── train_agent.py         
+├── hyperparam_search/         # 超参数搜索脚本和结果（未开始）
 │
-├── online/                    # Online / Rolling Prediction (Core)
-│   ├── online_trader.py       # Simulating real-world trading decisions
-│   └── rolling_test.py        # Walk-forward analysis
+├── online/                    # 在线/滚动预测（未开始）
+│   ├── online_trader.py       # 模拟实时交易决策
+│   └── rolling_test.py        # 滚动回测分析
 │
-├── hyperparam_search/         # Hyperparameter Tuning
-│
-├── experiments/               # Experiment Results (Logs, Plots, Checkpoints)
-│
-└── docs/                      # Documentation & Notes
+└── src/                       # 核心源代码
+    ├── data_processing/       # 数据清洗和特征工程脚本
+    │   └── __pycache__/      
+    ├── envs/                  # 自定义交易环境（兼容Gym，参考FinRL定义）
+    │   └── __pycache__/      
+    ├── models/                # 神经网络模型（未开启）
+    ├── training/              
+    │   └── __pycache__/      
+    └── utils/                 # 工具函数 (日志记录、随机种子等)
