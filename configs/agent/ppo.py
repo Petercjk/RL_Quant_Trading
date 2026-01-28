@@ -1,6 +1,5 @@
 import torch
 
-# PPO超参数配置
 
 PPO_PARAMS = {
     # 训练步数与批次大小
@@ -20,7 +19,8 @@ PPO_PARAMS = {
     "max_grad_norm": 0.5,      # 梯度裁剪阈值
     
     # 运行设备检测
-    "device": "cuda" if torch.cuda.is_available() else "cpu"
+    "device": "cuda" if torch.cuda.is_available() else "cpu",
+    "verbose": 1               # 日志输出级别
 }
 
 # 基础训练总步数（仅作为默认参考）

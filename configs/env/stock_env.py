@@ -18,9 +18,8 @@ ENV_KWARGS = {
     # 奖励函数
     "reward_scaling": 1e-4,       # 奖励缩放，协助模型收敛
     
-    # 风控与状态参数
+    # 风控与状态参数/40
     "turbulence_threshold": 70,   # 湍流阈值
-    "use_vix": False,             # A股无VIX数据
 }
 
 # 创新点：A 股交易单位约束配置 (Trading Unit Constraints)
