@@ -1,10 +1,10 @@
-# RL Quantitative Trading Agent (A-Share)
+﻿# RL Quantitative Trading Agent (A-Share)
 # 基于强化学习的量化交易智能体
 
-> 🚧 Work in Progress / 施工中**
+> 🚧 Work in Progress / 施工中
 >
 > This repository is currently under active development for my undergraduate thesis.
-> 本项目为我的本科毕业论文代码库，目前正在持续开发和更新中。
+> 本项目为我的本科毕业论文代码仓库，目前正在持续开发和更新中。
 
 ---
 
@@ -16,61 +16,56 @@ In simple terms, I'm training AI agents (using RL) to find profitable trading st
 
 欢迎！这是我的本科毕业论文《基于强化学习的量化交易智能体设计与实现》的代码仓库。
 
-简单来说，我正在尝试利用强化学习（RL）方法，训练一个能在中国A股市场里制定策略的AI智能体。与传统股价预测不同，这个项目的核心在于训练智能体学会在动态的市场环境中做决策（买入、卖出或持仓），从而实现资产增值。
+简单来说，我正在尝试利用强化学习（RL）方法，训练一个能在中国A股市场中制定交易策略的AI智能体。与传统股价预测不同，这个项目的核心在于让智能体学会在动态市场环境中做决策（买入、卖出或持有），从而实现资产增值。
 
 ## Key Features / 核心内容
 
 * Market: Chinese A-Share market (T+1 trading rule, price limits, etc).
-    * 市场： 聚焦中国 A 股（考虑 T+1、涨跌停限制等特有规则）。
+    * 市场：聚焦中国A股（考虑T+1、涨跌停限制等特有规则）。
 * Method: Deep Reinforcement Learning (PPO algorithm focus).
-    * 方法： 深度强化学习（PPO 算法等）。
+    * 方法：深度强化学习（重点使用PPO等算法）。
 * Evaluation: Focusing on Online Trading simulation, not just backtesting on training data.
-    * 评估： 重点在于模拟实盘决策，不仅仅是历史数据的简单回测。
+    * 评估：重点在于模拟实盘决策，而不仅仅是历史数据回测。
 * Data Source: Tushare API (Data is not included in this repo).
     * 数据源：Tushare API（原始数据文件不包含在仓库中）。
 
 ## Project Structure / 项目结构
 
 Here is how the project is organized. This structure is designed to separate configuration, core logic, and experimental results.
-这里是项目结构安排。项目采用了模块化结构设计，将配置、核心逻辑与实验结果分离，以便于复现和扩展。
-
+这里是项目结构安排。项目采用模块化结构设计，将配置、核心逻辑与实验结果分离，以便复现和扩展。
+## Structure Updated in 2026-03-03
+Updated project structure snapshot (focus on the latest experiment outputs):
+最新项目结构快照：
 ```text
 RL_Quant_Trading/
-│
-├── configs/                   # 配置文件 (YAML)
-│   ├── agent/                 # 智能体参数配置 (PPO, A2C 等)
-│   │   └── __pycache__/      
-│   ├── env/                   # 环境配置 (交易成本、窗口大小等)
-│   │   └── __pycache__/      
-│   ├── experiment/            # 实验配置(每次训练为单独一次实验)
-│   │   └── __pycache__/      
-│   └── __pycache__/           #
-│
-├── data/                      # 数据存储 (已在 .gitignore 中忽略)
-│   ├── raw/                   # 原始数据 (Tushare 下载)
-│   └── processed/             # 清洗和特征工程后的数据
-│
-├── docs/                      # 文档与笔记
-│   └── experiments/           # 实验结果数据 (已在 .gitignore 中忽略)
-│       └── 20260129_0014_base_experiment
-│           ├── checkpoints   # 模型检查点
-│           ├── logs          # 日志
-│           │   └── PPO_1     # PPO 单独训练日志
-│           ├── plots         # 绘图
-│           └── tables        # 表格数据
-│
-├── hyperparam_search/         # 超参数搜索脚本和结果（未开始）
-│
-├── online/                    # 在线/滚动预测（未开始）
-│   ├── online_trader.py       # 模拟实时交易决策
-│   └── rolling_test.py        # 滚动回测分析
-│
-└── src/                       # 核心源代码
-    ├── data_processing/       # 数据清洗和特征工程脚本
-    │   └── __pycache__/      
-    ├── envs/                  # 自定义交易环境（兼容Gym，参考FinRL定义）
-    │   └── __pycache__/      
-    ├── models/                # 神经网络模型（未开启）
-    ├── training/              
-    │   └── __pycache__/      
-    └── utils/                 # 工具函数 (日志记录、随机种子等)
+├─ configs/
+│  ├─ agent/ppo.py                        # PPO超参数配置
+│  ├─ env/stock_env.py                    # 环境参数配置
+│  └─ experiment/base_experiment.py       # 实验流程与目录管理
+├─ data/
+│  ├─ raw/China_A_share_Real_Data.csv     # 原始行情数据
+│  └─ processed/processed_data.csv        # 清洗后训练/回测数据
+├─ docs/
+│  └─ experiments/
+│     ├─ 20260303_2311_base_experiment/
+│     └─ 20260303_2329_base_experiment/
+│        ├─ checkpoints/
+│        │  └─ ppo_agent_base.zip         # 模型权重
+│        ├─ logs/                         # 训练日志
+│        ├─ plots/
+│        │  └─ performance_comparison.png # 策略与基准净值对比图
+│        └─ tables/
+│           ├─ account_value.csv          # Agent净值序列
+│           ├─ benchmark_account_value.csv # 公平口径Benchmark净值序列
+│           ├─ backtest_actions.csv       # 回测动作明细
+│           ├─ backtest_trades.csv        # 回测成交与费用明细
+│           └─ backtest_holdings.csv      # 回测持仓轨迹
+├─ src/
+│  ├─ data_processing/processor.py        # 数据抓取与特征工程
+│  ├─ envs/env_stocktrading.py            # 自定义交易环境
+│  └─ training/train_agent.py             # 训练与回测主逻辑
+├─ exp_main.py                            # 实验主入口
+├─ requirements.txt
+└─ Development_log.md
+```
+
