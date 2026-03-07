@@ -13,3 +13,13 @@
 - Ran end-to-end experiment successfully; PPO agent outperformed benchmark in latest run. 完整流程再次跑通，最新实验中PPO策略跑赢Benchmark。
 ![Latest Performance Comparison](docs/images/performance_comparison_20260303_2329.png)
 
+## 2026-03-07
+- Clarified project target as a deployable retail-scale prototype: fixed 40-stock pool + `Top-K` (`K=5`) selection, rebalanced every 5 trading days.
+  明确项目目标为面向普通投资者的小资金可部署原型：固定40只股票池 + `Top-K`（`K=5`）选股，每5个交易日调仓。
+- Refactored the project workflow: separated data fetch/cleaning from main training pipeline and updated project structure documentation.
+  完成项目流程重构：将数据抓取与清洗从主训练流程中独立出来，并同步更新项目结构文档。
+- Built the 40-stock universe from `selected_40_pool.xlsx` and completed end-to-end data fetching and processing.
+  基于 `selected_40_pool.xlsx` 的股票池清单完成40只标的选取，并完成抓取与处理全流程。
+- Updated `README.md` and `Development_log.md` with bilingual progress notes and latest project snapshot.
+  已更新 `README.md` 与 `Development_log.md` 的说明及最新项目快照。
+

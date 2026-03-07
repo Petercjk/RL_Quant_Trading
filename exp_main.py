@@ -15,7 +15,6 @@ from configs.experiment.base_experiment import (
     finalize_experiment,
     plot_comparison,
 )
-from src.data_processing.processor import DataProcessor
 from src.training.train_agent import AgentTrainer
 
 
@@ -71,17 +70,11 @@ def run_experiment_pipeline():
         return
 
     if TASK_CONTROL["do_preprocessing"]:
-        print("INFO: 执行数据预处理...")
-        try:
-            processor = DataProcessor(token="d00985e44d97b66607e1bb3209880a913e9e651e861477dbbdbfacaf")
-            processor.run()
-            if not os.path.exists(DATA_PATH["processed"]):
-                print("ERROR: 预处理完成但未找到 processed CSV")
-                return
-            print("SUCCESS: 数据预处理完成")
-        except Exception as e:
-            print(f"ERROR: 数据预处理失败: {e}")
-            return
+        print("SKIP: 主程序不再执行股票抓取/预处理。")
+        print(
+            "INFO: 请先单独运行 `python src/data_processing/fetch_40_pool.py` "
+            "自动生成 raw 与 processed 数据。"
+        )
     else:
         print("SKIP: 跳过数据预处理，使用现有 processed 数据")
 
