@@ -22,3 +22,9 @@
   基于 `selected_40_pool.xlsx` 的股票池清单完成40只标的选取，并完成抓取与处理全流程。
 - Updated `README.md` and `Development_log.md` with bilingual progress notes and latest project snapshot.
   已更新 `README.md` 与 `Development_log.md` 的说明及最新项目快照。
+
+## 2026-03-08
+- Implemented multi-seed (10 seeds) evaluation pipeline to verify strategy robustness and reproducibility. 实现了多随机种子（10个）评估流水线，以验证策略的鲁棒性与可复现性。
+- Updated model saving logic to retain the median-performing agent based on Sharpe ratio. 更新了模型保存逻辑，基于夏普比率保留表现居中（中位数）的智能体。
+- Updated the experiment logging system to systematically record all hyperparameters, environment configurations, and per-seed metrics. 更新了实验日志系统，系统性地完整记录所有超参数、环境配置及各个种子的性能指标。
+![Median Model Performance Comparison](docs/experiments/20260308_1910_base_experiment/plots/performance_comparison.png)

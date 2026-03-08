@@ -21,7 +21,7 @@ class AgentTrainer:
             df=df,
             stock_dim=self.stock_dim,
             hmax=1000,
-            initial_amount=1_000_000,
+            initial_amount=10000,
             buy_cost_pct=[0.001] * self.stock_dim,
             sell_cost_pct=[0.001] * self.stock_dim,
             tech_indicator_list=TECHNICAL_INDICATORS,
@@ -38,20 +38,18 @@ class AgentTrainer:
             **PPO_PARAMS,
         )
 
-        print("开始训练 PPO（纯 SB3，自定义 A 股环境）...")
         model.learn(total_timesteps=total_timesteps)
 
-        save_path = os.path.join(self.paths["model"], "ppo_agent_base")
-        model.save(save_path)
+        # 删除了原来的 model.save() 逻辑，将保存权移交给外层主程序
         return model
-
+    
     def run_backtest(self, model):
         # Use raw env for evaluation to avoid DummyVecEnv auto-reset.
         env_trade = StockTradingEnv(
             df=self.trade_data,
             stock_dim=self.stock_dim,
             hmax=1000,
-            initial_amount=1_000_000,
+            initial_amount=10000,
             buy_cost_pct=[0.001] * self.stock_dim,
             sell_cost_pct=[0.001] * self.stock_dim,
             tech_indicator_list=TECHNICAL_INDICATORS,

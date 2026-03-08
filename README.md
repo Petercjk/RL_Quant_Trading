@@ -100,7 +100,7 @@ RL_Quant_Trading/
 
 ```
 
-## Stage Documentation Framework (Bilingual) / 分阶段说明文档框架（中英双语）
+## Stage Documentation Framework / 分阶段说明文档框架
 ### Stage 1: Primary Offline Test / 阶段1：离线主实验
 - `Objective / 目标`:
   Validate cross-regime generalization on A-share market.
