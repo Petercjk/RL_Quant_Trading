@@ -33,4 +33,6 @@
 - Completed 4-year OOS evaluation (2022-2025) and saved reports/plots under docs/experiments. 完成2022-2025四年OOS评估并输出报告与图表至docs/experiments。
 - Finished 10-seed rolling retrain experiments and generated seed-wise summaries and annual return comparison plot. 完成10个随机种子的滚动重训实验，并输出分种子汇总与年化收益率对比图。
 - Selected the best-performing rolling model (seed7) as the candidate for upcoming live demo. 选定滚动重训中表现最佳的seed7模型，作为后续实机演示候选。
+- Built the live demo pipeline with cold start, daily interaction, and local logs/plots under docs/live_demo. 完成实机演示流水线（冷启动、每日交互、日志与绘图输出至docs/live_demo）。
+- Thesis workflow is now stable; next iterations will focus on model tuning and strategy design, with continuous updates. 毕业论文主体阶段告一段落，后续将持续推进模型调优与策略设计部分的更新。
 ![Best performed seed](docs/experiments/20260311_0254_rolling_experiment/seeds/seed_7/plots/performance_comparison.png)

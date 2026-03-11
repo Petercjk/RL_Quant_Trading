@@ -1,7 +1,7 @@
 ﻿# RL Quantitative Trading Agent (A-Share)
 # 基于强化学习的量化交易智能体
 
-> 🚧 Work in Progress / 施工中
+> Work in Progress / 施工中
 >
 > This repository is currently under active development for my undergraduate thesis.
 > 本项目为我的本科毕业论文代码仓库，目前正在持续开发和更新中。
@@ -40,6 +40,8 @@ Instead of only predicting prices, the agent learns decision-making and position
   完成2022-2025四年OOS评估与10个随机种子的滚动重训实验，结果与图表已归档至docs/experiments。
 - Selected the best-performing rolling model (seed7) as the candidate for upcoming live demo stage.
   选定滚动重训中表现最佳的seed7模型，作为后续实机演示候选。
+- Built the live demo workflow (cold start + daily interaction) with automatic data updates and local logs/plots under docs/live_demo.
+  完成实机演示流程（冷启动 + 每日交互），包含自动数据更新与本地日志/绘图，输出至docs/live_demo。
 
 ## Project Structure / 项目结构
 
@@ -71,6 +73,7 @@ RL_Quant_Trading/
 │        └─ processed_data.csv            # Snapshot file / 快照数据文件
 ├─ docs/                                  # Reports and archives / 报告与历史归档
 │  ├─ experiments/                        # Current run outputs / 当前实验输出
+│  ├─ live_demo/                           # Live demo outputs / 实机演示输出
 │  └─ experiments_legacy/                 # Historical experiment archives / 历史实验归档
 │     ├─ 20260129_0014_base_experiment/
 │     ├─ 20260303_2300_base_experiment/
@@ -102,6 +105,7 @@ RL_Quant_Trading/
 ├─ exp_main.py                            # Main pipeline entry / 主流程入口
 ├─ test_oos.py                             # Stage 2 OOS evaluation / 阶段2长期OOS评估
 ├─ test_rolling.py                         # Stage 3 rolling retrain / 阶段3滚动重训
+├─ live_demo.py                            # Stage 4 live demo entry / 阶段4实机演示入口
 ├─ selected_40_pool.xlsx                  # Selected 40-stock universe source / 40池选股源文件
 ├─ README.md                              # Project documentation / 项目文档
 └─ requirements.txt                       # Python dependencies / Python依赖
@@ -160,12 +164,15 @@ RL_Quant_Trading/
 - `Objective / 目标`:
   Demonstrate daily data input and strategy output loop.
   展示“每日输入数据-输出策略”闭环。
+- `Mode / 运行方式`:
+  Cold start on the first live date, then daily interactive updates.
+  冷启动进入实盘日期后，每日交互式更新。
 - `Protocol / 协议`:
   Use latest model trained from historical data before demo window.
   使用演示窗口前训练出的最新模型。
 - `Outputs / 输出物`:
-  Daily strategy log, realized paper-trading NAV, operation records.
-  每日策略日志、模拟净值、运行记录。
+  Daily strategy log, holdings/account CSVs, comparison plots.
+  每日策略日志、持仓/账户CSV、对比图。
 - `Boundary / 边界`:
   Demo is not used for back-adjusting model design.
   演示结果不得反向用于模型设计调整。

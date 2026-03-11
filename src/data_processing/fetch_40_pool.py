@@ -236,6 +236,7 @@ def clean_and_engineer(raw_df: pd.DataFrame) -> pd.DataFrame:
     if "industry" in aligned.columns:
         aligned["industry"] = aligned.groupby("tic")["industry"].ffill().bfill()
 
+    # A股日线在部分区间可能无法稳定计算 turbulence，这里加入降级处理
     fe = FeatureEngineer(
         use_technical_indicator=True,
         tech_indicator_list=TECHNICAL_INDICATORS,
@@ -243,7 +244,19 @@ def clean_and_engineer(raw_df: pd.DataFrame) -> pd.DataFrame:
         use_turbulence=True,
         user_defined_feature=False,
     )
-    processed = fe.preprocess_data(aligned)
+    try:
+        processed = fe.preprocess_data(aligned)
+    except Exception:
+        fe = FeatureEngineer(
+            use_technical_indicator=True,
+            tech_indicator_list=TECHNICAL_INDICATORS,
+            use_vix=False,
+            use_turbulence=False,
+            user_defined_feature=False,
+        )
+        processed = fe.preprocess_data(aligned)
+        if "turbulence" not in processed.columns:
+            processed["turbulence"] = 0.0
     processed = processed.sort_values(["tic", "date"]).reset_index(drop=True)
 
     # 追加基础市场特征，均按单股票时间序列计算，避免截面混算。
