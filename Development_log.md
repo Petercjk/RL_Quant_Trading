@@ -33,4 +33,4 @@
 - Completed 4-year OOS evaluation (2022-2025) and saved reports/plots under docs/experiments. 完成2022-2025四年OOS评估并输出报告与图表至docs/experiments。
 - Finished 10-seed rolling retrain experiments and generated seed-wise summaries and annual return comparison plot. 完成10个随机种子的滚动重训实验，并输出分种子汇总与年化收益率对比图。
 - Selected the best-performing rolling model (seed7) as the candidate for upcoming live demo. 选定滚动重训中表现最佳的seed7模型，作为后续实机演示候选。
-![Best performed seed](docs\experiments\20260311_0254_rolling_experiment\seeds\seed_7\plots\performance_comparison.png)
+![Best performed seed](docs/experiments/20260311_0254_rolling_experiment/seeds/seed_7/plots/performance_comparison.png)
