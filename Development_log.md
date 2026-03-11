@@ -11,7 +11,6 @@
 - Added backtest diagnostics CSV outputs (actions / trades / holdings) for analysis. 新增回测诊断表（动作/成交/持仓）CSV输出，便于定位策略行为与成本影响。
 - Updated benchmark to fair setting (equal-weight daily rebalance with buy/sell costs). 将Benchmark更新为更公平口径（等权日频再平衡+双边手续费）。
 - Ran end-to-end experiment successfully; PPO agent outperformed benchmark in latest run. 完整流程再次跑通，最新实验中PPO策略跑赢Benchmark。
-![Latest Performance Comparison](docs/experiments_legacy/20260303_2329_base_experiment/plots/performance_comparison.png)
 
 ## 2026-03-07
 - Clarified project target as a deployable retail-scale prototype: fixed 40-stock pool + `Top-K` (`K=5`) selection, rebalanced every 5 trading days.
