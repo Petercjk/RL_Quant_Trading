@@ -6,7 +6,7 @@ from src.envs.env_stocktrading import StockTradingEnv
 from configs.base_config import TECHNICAL_INDICATORS
 from configs.agent.ppo import PPO_PARAMS
 
-finrl_models.pd = pd  # Ensure pandas is available in FinRL internals.
+finrl_models.pd = pd  
 
 
 class AgentTrainer:
@@ -40,7 +40,7 @@ class AgentTrainer:
 
         model.learn(total_timesteps=total_timesteps)
 
-        # 删除了原来的 model.save() 逻辑，将保存权移交给外层主程序
+        # 将保存权移交给外层主程序
         return model
     
     def run_backtest(self, model):
@@ -60,7 +60,7 @@ class AgentTrainer:
         trade_records = []
         holding_records = []
 
-        # Initial portfolio snapshot (day 0).
+        # 初始投资组合快照（第0天）
         init_date = env_trade.current_date
         init_total_asset = float(env_trade._get_total_asset())
         for i, tic in enumerate(env_trade.current_tics):

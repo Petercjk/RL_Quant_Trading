@@ -35,11 +35,17 @@ Instead of only predicting prices, the agent learns decision-making and position
 * Data Source: Tushare API.
   * 数据源：Tushare API。
 
+## Latest Update / 最新进度
+- Completed 4-year OOS evaluation (2022-2025) and rolling retrain experiments with 10 seeds; results and plots saved under docs/experiments.
+  完成2022-2025四年OOS评估与10个随机种子的滚动重训实验，结果与图表已归档至docs/experiments。
+- Selected the best-performing rolling model (seed7) as the candidate for upcoming live demo stage.
+  选定滚动重训中表现最佳的seed7模型，作为后续实机演示候选。
+
 ## Project Structure / 项目结构
 
 Here is how the project is organized. This structure is designed to separate configuration, core logic, and experimental results.
 这里是项目结构安排。项目采用模块化结构设计，将配置、核心逻辑与实验结果分离，以便复现和扩展。
-## Structure Updated in 2026-03-07 / 2026-03-07 最新项目结构快照
+## Structure Updated in 2026-03-11 / 2026-03-11 最新项目结构快照
 Current snapshot (aligned with fixed 40-stock pool and Top-K workflow):
 当前结构（已对齐固定40股与Top-K流程）：
 
@@ -94,6 +100,8 @@ RL_Quant_Trading/
 ├─ .gitignore                             # Git ignore rules / Git忽略规则
 ├─ Development_log.md                     # Development notes / 开发记录
 ├─ exp_main.py                            # Main pipeline entry / 主流程入口
+├─ test_oos.py                             # Stage 2 OOS evaluation / 阶段2长期OOS评估
+├─ test_rolling.py                         # Stage 3 rolling retrain / 阶段3滚动重训
 ├─ selected_40_pool.xlsx                  # Selected 40-stock universe source / 40池选股源文件
 ├─ README.md                              # Project documentation / 项目文档
 └─ requirements.txt                       # Python dependencies / Python依赖
@@ -123,7 +131,7 @@ RL_Quant_Trading/
   Provide external validity on unseen period.
   在完全未见区间给出外部真实性证据。
 - `Data Scope / 数据范围`:
-  `2022-01-01 ~ 2024-12-31`.
+  `2022-01-01 ~ 2025-12-31`.
 - `Rules / 规则`:
   No model redesign, no reward tuning, no hyperparameter tuning.
   不改模型结构、不改奖励函数、不调超参数。
@@ -136,11 +144,11 @@ RL_Quant_Trading/
   Verify deployment feasibility under rolling update mechanism.
   验证滚动更新机制下系统可部署性。
 - `Data Scope / 数据范围`:
-  Deploy year `2025`, update frequency quarterly.
-  部署年份2025，季度更新。
+  Rolling OOS over `2022-2025`, yearly windows with trailing 3-year training span.
+  2022-2025滚动样本外评估，每年滚动一次，训练窗口为最近3年。
 - `Protocol / 协议`:
-  Retrain each quarter with trailing 3-year window.
-  每季度使用最近3年窗口重训。
+  Multi-seed rolling retrain for robustness; keep logs and NAV continuity.
+  多随机种子滚动重训验证稳健性，记录日志并拼接连续净值曲线。
 - `Outputs / 输出物`:
   Quarterly model versions, deployment logs, rolling NAV path.
   季度模型版本、部署日志、滚动净值轨迹。
@@ -152,8 +160,6 @@ RL_Quant_Trading/
 - `Objective / 目标`:
   Demonstrate daily data input and strategy output loop.
   展示“每日输入数据-输出策略”闭环。
-- `Data Scope / 数据范围`:
-  `2026-01 ~ 2026-02` (demo window).
 - `Protocol / 协议`:
   Use latest model trained from historical data before demo window.
   使用演示窗口前训练出的最新模型。

@@ -217,6 +217,7 @@ class StockTradingEnv(gym.Env):
         self.portfolio_return_memory.append(portfolio_return)
         self.turnover_memory.append(turnover_ratio)
 
+        # 以下为原版奖励计算逻辑，当前版本仅使用收益作为奖励，风险和换手惩罚项暂不启用。
         risk_20 = 0.0
         if len(self.portfolio_return_memory) >= 20:
             risk_20 = float(np.std(self.portfolio_return_memory[-20:], ddof=0))
@@ -226,6 +227,41 @@ class StockTradingEnv(gym.Env):
             - self.risk_penalty * risk_20
             - self.turnover_penalty * turnover_ratio
         ) * self.reward_scaling
+
+
+
+
+        # # 以下为新版，参考文献
+        # # 1: Bai et al.(2024) 元分析表明 Shaped Reward 显著优于 Raw Return
+        # # 2: Liang (2025) 强调需对最大回撤 (Max Drawdown) 赋予高额惩罚权重
+        
+        # risk_20 = 0.0
+        # if len(self.portfolio_return_memory) >= 20:
+        #     risk_20 = float(np.std(self.portfolio_return_memory[-20:], ddof=0))
+
+        # # 1. 动态计算历史最高点与当前回撤幅度
+        # current_max_asset = max(self.asset_memory) if self.asset_memory else begin_asset
+        # current_drawdown = max(0.0, (current_max_asset - end_asset) / max(current_max_asset, 1e-8))
+        
+        # # 2. 回撤惩罚 (Drawdown Penalty)：采用非线性放大
+        # # 当回撤较小时惩罚极弱，当回撤超过一定幅度时（如疫情熔断），平方项会导致惩罚呈指数级暴增，强迫模型立刻空仓
+        # drawdown_penalty = 5.0 * (current_drawdown ** 2)
+
+        # # 3. 超额收益 (Alpha)：用当前收益减去大盘特征中的市场平均收益
+        # market_return_today = float(self.market_features[0]) 
+        # alpha_return = portfolio_return - market_return_today
+
+        # # 4. 复合奖励公式 (对应文献中的收益-回撤-波动三维制衡)
+        # reward = (
+        #     alpha_return
+        #     - self.risk_penalty * risk_20
+        #     - drawdown_penalty
+        #     - self.turnover_penalty * turnover_ratio
+        # ) * self.reward_scaling
+
+
+        # 经过经验，由于目前策略top-5设计缺陷，agent必须一致持有五只股票，即使它发现熊市也没办法抛出。因此，新的奖励函数效果不佳，以后改掉策略后再启用。
+        
 
         self.asset_memory.append(end_asset)
         self.date_memory.append(self.current_date)

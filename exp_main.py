@@ -5,15 +5,18 @@ import pandas as pd
 import random
 import torch
 import time
+import shutil
 from datetime import datetime
 from configs.agent.ppo import PPO_PARAMS
-
+from configs.base_config import DATA_PATH, TIME_WINDOW, TECHNICAL_INDICATORS
+from src.envs.env_stocktrading import StockTradingEnv
 
 project_root = os.path.dirname(os.path.abspath(__file__))
 if project_root not in sys.path:
     sys.path.append(project_root)
 
-from configs.base_config import DATA_PATH, TIME_WINDOW
+
+
 from configs.experiment.base_experiment import (
     TASK_CONTROL,
     EXP_PATHS,
@@ -33,7 +36,7 @@ def _prepare_price_pivot(trade_df: pd.DataFrame) -> pd.DataFrame:
 def build_equal_weight_benchmark(
     trade_df: pd.DataFrame,
     initial_amount: float = 10_000,
-    rebalance_window: int = 5,  # 新增：对齐 5日调仓 频率
+    rebalance_window: int = 5,  #对齐5日调仓频率
     buy_cost_pct: float = 0.001,
     sell_cost_pct: float = 0.001,
 ):
@@ -184,7 +187,6 @@ def compute_six_metrics(
     }
 
 
-
 def run_experiment_pipeline():
     initial_amount = 10_000
     buy_cost_pct = 0.001
@@ -193,26 +195,7 @@ def run_experiment_pipeline():
     # 设置 10 个随机种子
     SEEDS = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]  
     
-    hyperparams_log = {
-        "Train_Window": f"{TIME_WINDOW['train_start']} to {TIME_WINDOW['train_end']}",
-        "Test_Window": f"{TIME_WINDOW['trade_start']} to {TIME_WINDOW['trade_end']}",
-        "Initial_Amount": initial_amount,
-        "Transaction_Costs": f"Buy: {buy_cost_pct}, Sell: {sell_cost_pct}",
-        "PPO_Params": str(PPO_PARAMS),
-        "Total_Timesteps": 50000,
-        "Rebalance_Window": 5,
-        "Top_K": 5
-    }
-
-    try:
-        # 将参数字典传入初始化函数
-        init_base_experiment(hyperparams_dict=hyperparams_log)
-        print(f"SUCCESS: 实验目录初始化成功，输出路径: {EXP_PATHS['root']}")
-    except Exception as e:
-        print(f"ERROR: 实验目录初始化失败: {e}")
-        return
-
-    # 数据加载与预处理
+    # 1. 先进行数据加载（挪到前面），以便后续实例化环境获取真实的动态参数
     try:
         full_df = pd.read_csv(DATA_PATH["processed"])
         train_df = full_df[(full_df.date >= TIME_WINDOW["train_start"]) & (full_df.date <= TIME_WINDOW["train_end"])]
@@ -222,6 +205,39 @@ def run_experiment_pipeline():
             return
     except Exception as e:
         print(f"ERROR: 加载 processed 数据失败: {e}")
+        return
+
+    # 2. 实例化一个临时环境，精准提取内部设定的特征列与惩罚系数
+    stock_dim = len(train_df.tic.unique())
+    tmp_env = StockTradingEnv(
+        df=train_df,
+        stock_dim=stock_dim,
+        hmax=1000,
+        initial_amount=initial_amount,
+        buy_cost_pct=[buy_cost_pct] * stock_dim,
+        sell_cost_pct=[sell_cost_pct] * stock_dim,
+        tech_indicator_list=TECHNICAL_INDICATORS,
+    )
+
+    # 3. 动态组装超参数字典，确保滴水不漏地记录所有环境细节
+    hyperparams_log = {
+        "Train_Window": f"{TIME_WINDOW['train_start']} to {TIME_WINDOW['train_end']}",
+        "Test_Window": f"{TIME_WINDOW['trade_start']} to {TIME_WINDOW['trade_end']}",
+        "PPO_Params": str(PPO_PARAMS),
+        "Total_Timesteps": 50000,
+        "Environment_Core": f"Top_K={tmp_env.top_k}, Rebalance={tmp_env.rebalance_window} days, Lot_Size={tmp_env.lot_size}",
+        "Reward_Shaping": f"Risk_Penalty={tmp_env.risk_penalty}, Turnover_Penalty={tmp_env.turnover_penalty}, Scaling={tmp_env.reward_scaling}",
+        "Trading_Costs": f"Buy: {buy_cost_pct}, Sell: {sell_cost_pct}, Initial_Amount: {initial_amount}",
+        "State_Features": f"[{len(tmp_env.feature_cols)} cols] " + ", ".join(tmp_env.feature_cols),
+        "Market_Features": ", ".join(list(tmp_env.market_df.columns))
+    }
+
+    # 4. 初始化实验目录并写入日志
+    try:
+        init_base_experiment(hyperparams_dict=hyperparams_log)
+        print(f"SUCCESS: 实验目录初始化成功，输出路径: {EXP_PATHS['root']}")
+    except Exception as e:
+        print(f"ERROR: 实验目录初始化失败: {e}")
         return
 
     trainer = AgentTrainer(train_df, trade_df, EXP_PATHS)
@@ -382,6 +398,9 @@ def run_experiment_pipeline():
                 
             finalize_experiment(median_df, perf_stats)
             print(f"SUCCESS: 实验报告已更新至: {EXP_PATHS['root']}")
+
+
+   
 
 if __name__ == "__main__":
     run_experiment_pipeline()
